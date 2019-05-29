@@ -1,8 +1,8 @@
 const getCartStats = cart => {
-    const coinCosts = cart.map(e => e[1])
+    const coinCosts = cart.map(e => e.coins)
     const totalCoins = coinCosts.reduce((a,b) => a + b, 0)
 
-    const goldReceived = cart.map(e => e[0])
+    const goldReceived = cart.map(e => e.gold)
     const totalGold = goldReceived.reduce((a,b) => a + b, 0)
 
     const ratio = totalGold / totalCoins
@@ -19,8 +19,8 @@ const printCart = cart => {
 
     console.log("Items:")
     cart.forEach(e => {
-        const gold = e[0]
-        const coins = e[1]
+        const gold = e.gold
+        const coins = e.coins
         console.log(`Buy ${gold} gold for ${coins} coins`)
     })
 }
@@ -28,10 +28,14 @@ const printCart = cart => {
 const getListings = () => {
     let dataset = []
     $(".searchItemList").find("tr.odd,tr.even").each((index, element) => {
-        const gold = $($(element).find("span")[0]).text()
-        const coins = $($(element).find("span")[1]).text()
-        dataset.push([parseInt(gold), parseInt(coins), gold/coins])
+        const gold = parseInt($($(element).find("span")[0]).text())
+        const coins = parseInt($($(element).find("span")[1]).text())
+        const ratio = gold / coins
+
+        dataset.push({ gold, coins, ratio })
     })
+
+    dataset.sort((a,b) => (a.ratio < b.ratio) ? 1 : -1)
 
     return dataset
 }
@@ -47,8 +51,7 @@ const bestValueForCoins = (_max, _cart, _listings) => {
     const listings = _listings || getListings()
     let dataset = listings.slice()
 
-    dataset = dataset.filter(a => a[1] <= max)
-    dataset.sort((a,b) => (a[2] < b[2]) ? 1 : -1)
+    dataset = dataset.filter(listing => listing.coins <= max && !cart.includes(a))
 
     const next = dataset[0]
     if (next === undefined) {
@@ -56,7 +59,7 @@ const bestValueForCoins = (_max, _cart, _listings) => {
     }
 
     cart.push(next)
-    max = max - next[1]
+    max = max - next.coins
 
     return bestValueForCoins(max, cart, listings)
 }
@@ -68,10 +71,10 @@ const findBestCoinValue = () => {
     for (var i=3; i < 100; i++) {
         const cart = bestValueForCoins(i)
 
-        const coinCosts = cart.map(e => e[1])
+        const coinCosts = cart.map(e => e.coins)
         const totalCoins = coinCosts.reduce((a,b) => a + b, 0)
 
-        const goldReceived = cart.map(e => e[0])
+        const goldReceived = cart.map(e => e.gold)
         const totalGold = goldReceived.reduce((a,b) => a + b, 0)
 
         const ratio = totalGold / totalCoins

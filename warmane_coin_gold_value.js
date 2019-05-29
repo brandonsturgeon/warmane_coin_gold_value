@@ -1,3 +1,6 @@
+// TODO: This is a "greedy" solution to the Knapsack problem. What we need is a Knapsack 1/0 imlementation.
+
+
 const getCartStats = cart => {
     const coinCosts = cart.map(e => e.coins)
     const totalCoins = coinCosts.reduce((a,b) => a + b, 0)

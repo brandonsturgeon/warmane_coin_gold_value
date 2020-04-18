@@ -131,3 +131,6 @@ const filterForBest = (maxCoins) => {
     const elements = _.map(cart.items, i => i.element)
     hideOtherItems(elements)
 }
+
+// $($($(".sideBtn.active")[0]).children()[0]).text()
+// "Gold"

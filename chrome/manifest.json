@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Warmane Gold Value",
+  "description": "Find the best gold listings to buy based on how many coins you want to spend",
+  "version": "1.0",
+  "permissions": ["scripting", "activeTab"],
+  "content-scripts": [
+    {
+      "matches": ["https://www.warmane.com/account/trade"],
+      "js": ["lodash.min.js", "content.js"]
+    }
+  ]
+}
+
